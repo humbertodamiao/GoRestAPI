@@ -21,6 +21,7 @@ Some endpoints may require authentication. To obtain an access token for authent
 - Run the collection by clicking three dots at the root folder and select Run collection option
 - It could be run each test folder separately by clicking three dots on the wanted folder and select Run folder option.
 - Verify the response status codes for each request to ensure proper handling of requests.
+- Another way to get the tests is by workspace for Postman on https://www.postman.com/galactic-crater-982733/workspace/gorest-api-testing
 
 ## Feedback and Issues
 If you encounter any issues or have feedback regarding the GoRest API, you can reach out to the GoRest team through their website or support channels.
