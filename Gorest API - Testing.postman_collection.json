@@ -1,0 +1,948 @@
+{
+	"info": {
+		"_postman_id": "667e8dc8-6feb-49fc-bc19-4012018c63c9",
+		"name": "Gorest API - Testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12782722",
+		"_collection_link": "https://www.postman.com/galactic-crater-982733/workspace/nos/collection/12782722-667e8dc8-6feb-49fc-bc19-4012018c63c9?action=share&source=collection_link&creator=12782722"
+	},
+	"item": [
+		{
+			"name": "TS001 - Users",
+			"item": [
+				{
+					"name": "TC001 - Create a valid user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"User created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"\r",
+									"    pm.globals.set(\"idUser\", jsonData.id);\r",
+									"\r",
+									"console.log(jsonData.id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{$randomFullName}}\", \r\n    \"gender\": \"male\", \r\n    \"email\": \"{{$randomExampleEmail}}\", \r\n    \"status\": \"active\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Server}}{{EndpointUsers}}",
+							"host": [
+								"{{Server}}{{EndpointUsers}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC002 - Try to Create a user with invalid e-mail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"E-mail is invalid\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{$randomFullName}}\", \r\n    \"gender\": \"male\", \r\n    \"email\": \"humb#gmail.com\", \r\n    \"status\": \"active\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Server}}{{EndpointUsers}}",
+							"host": [
+								"{{Server}}{{EndpointUsers}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC003 - Try to Create a user already created",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"E-mail is already created\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 2139248,\r\n    \"name\": \"Puneet Guha\",\r\n    \"email\": \"puneet_guha@watsica.test\",\r\n    \"gender\": \"female\",\r\n    \"status\": \"inactive\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Server}}{{EndpointUsers}}",
+							"host": [
+								"{{Server}}{{EndpointUsers}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC004 - Search all users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"User details found\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"\r",
+									"    pm.globals.set(\"idUser\", jsonData.id);\r",
+									"\r",
+									"console.log(jsonData.id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Server}}{{EndpointUsers}}",
+							"host": [
+								"{{Server}}{{EndpointUsers}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC005 - Search all users with page parameter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"User details found\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Server}}{{EndpointUsers}}?page=2",
+							"host": [
+								"{{Server}}{{EndpointUsers}}"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC006 - Search user by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"User details found\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Server}}{{EndpointUsers}}/{{idUser}}",
+							"host": [
+								"{{Server}}{{EndpointUsers}}"
+							],
+							"path": [
+								"{{idUser}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC007 - Update user details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{$randomFullName}}\", \r\n    \"gender\": \"male\", \r\n    \"email\": \"{{$randomExampleEmail}}\", \r\n    \"status\": \"active\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Server}}{{EndpointUsers}}/{{idUser}}",
+							"host": [
+								"{{Server}}{{EndpointUsers}}"
+							],
+							"path": [
+								"{{idUser}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC008 - Delete a valid user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"User deleted\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{Server}}{{EndpointUsers}}/{{idUser}}",
+							"host": [
+								"{{Server}}{{EndpointUsers}}"
+							],
+							"path": [
+								"{{idUser}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC009 - Try to delete a invalid user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"User not found\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{Server}}{{EndpointUsers}}/00000",
+							"host": [
+								"{{Server}}{{EndpointUsers}}"
+							],
+							"path": [
+								"00000"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TS002 - Posts",
+			"item": [
+				{
+					"name": "TC010 - Create a post with a valid user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Post Created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"\r",
+									"    pm.globals.set(\"idPost\", jsonData.id);\r",
+									"\r",
+									"console.log(jsonData.id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"{{$randomLoremSentence}}\",\r\n    \"body\":\"{{$randomLoremSentences}}}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Server}}{{EndpointUsers}}/{{idUser}}{{EndpointPosts}}",
+							"host": [
+								"{{Server}}{{EndpointUsers}}"
+							],
+							"path": [
+								"{{idUser}}{{EndpointPosts}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC011 -  Try to create a post with a invalid user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Post not Created\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"{{$randomLoremSentence}}\",\r\n    \"body\":\"{{$randomLoremSentences}}}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Server}}{{EndpointUsers}}/0000{{EndpointPosts}}",
+							"host": [
+								"{{Server}}{{EndpointUsers}}"
+							],
+							"path": [
+								"0000{{EndpointPosts}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC012 -  Try to create a post without title",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Title can not be blank\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"\",\r\n    \"body\":\"{{$randomLoremSentences}}}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Server}}{{EndpointUsers}}/{{idUser}}{{EndpointPosts}}",
+							"host": [
+								"{{Server}}{{EndpointUsers}}"
+							],
+							"path": [
+								"{{idUser}}{{EndpointPosts}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC013 -  Try to create a post without body",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Body can not be blank\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"{{$randomLoremSentence}}\",\r\n    \"body\":\"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Server}}{{EndpointUsers}}/{{idUser}}{{EndpointPosts}}",
+							"host": [
+								"{{Server}}{{EndpointUsers}}"
+							],
+							"path": [
+								"{{idUser}}{{EndpointPosts}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC014 - Get all posts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Server}}{{EndpointPosts}}",
+							"host": [
+								"{{Server}}{{EndpointPosts}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC015 - Get all posts page parameter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Server}}{{EndpointPosts}}?page=4",
+							"host": [
+								"{{Server}}{{EndpointPosts}}"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC016 - Get post by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Id found\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Server}}{{EndpointPosts}}/{{idPost}}",
+							"host": [
+								"{{Server}}{{EndpointPosts}}"
+							],
+							"path": [
+								"{{idPost}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC017 - Try to get a post using a invalid Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Id not found\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Server}}{{EndpointPosts}}/juff45",
+							"host": [
+								"{{Server}}{{EndpointPosts}}"
+							],
+							"path": [
+								"juff45"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC018 - Get post using user id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Id found\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Server}}{{EndpointUsers}}/{{idUser}}{{EndpointPosts}}",
+							"host": [
+								"{{Server}}{{EndpointUsers}}"
+							],
+							"path": [
+								"{{idUser}}{{EndpointPosts}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC019 - Update a post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Post updated\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"Post Updated\",\r\n    \"body\":\"{{$randomLoremSentences}}}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Server}}{{EndpointPosts}}/{{idPost}}",
+							"host": [
+								"{{Server}}{{EndpointPosts}}"
+							],
+							"path": [
+								"{{idPost}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC020 - Delete a post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Post deleted\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"Post Updated\",\r\n    \"body\":\"{{$randomLoremSentences}}}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Server}}{{EndpointPosts}}/{{idPost}}",
+							"host": [
+								"{{Server}}{{EndpointPosts}}"
+							],
+							"path": [
+								"{{idPost}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TS003 - Comments",
+			"item": [
+				{
+					"name": "TC021 - Creates a post comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Comment created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"id\": 1457,\r\n        \"post_id\": {{idPost}},\r\n        \"name\": \"Fernando Loures\",\r\n        \"email\": \"Fernando@hettinger.example\",\r\n        \"body\": \"Good look, man!\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Server}}{{EndpointComments}}",
+							"host": [
+								"{{Server}}{{EndpointComments}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC022 - Get all comments",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Server}}{{EndpointComments}}",
+							"host": [
+								"{{Server}}{{EndpointComments}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
